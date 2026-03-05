@@ -1,483 +1,350 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EarnPro Max - Reliable Earning Platform</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tips E-Sports - বাংলাদেশের সেরা ফ্রি ফায়ার টুর্নামেন্ট অ্যাপ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #6C5CE7;
-            --primary-light: #A29BFE;
-            --success: #00B894;
-            --pending: #FDCB6E;
-            --danger: #D63031;
-            --bg: #F0F3F7;
-            --card: #FFFFFF;
-            --text-dark: #2D3436;
-            --text-light: #636E72;
-            --radius: 25px;
-            --shadow: 0 12px 30px rgba(108, 92, 231, 0.12);
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
         }
-
-        /* Essential Resets */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-dark); overflow-x: hidden; }
-
-        /* Loading Screen Styles */
-        .loading-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, var(--primary), #5848C2);
-            z-index: 99999;
+        .container { max-width: 420px; margin: 0 auto; padding: 0 15px; }
+        .download-cta {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15,12,41,0.95);
+            backdrop-filter: blur(12px);
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,107,107,0.25);
+            text-align: center;
+        }
+        .download-btn {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 18px 0;
+            font-size: 1.4em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(255,65,108,0.6);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-            opacity: 1;
-            transition: opacity 0.5s ease-out;
+            gap: 12px;
         }
-
-        .loading-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
+        .download-btn:hover, .download-btn:active {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(255,65,108,0.8);
         }
-
-        .loading-logo {
-            font-size: 4rem;
-            color: white;
-            margin-bottom: 25px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .loading-title {
-            color: white;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .loading-subtitle {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 1rem;
-            margin-bottom: 50px;
+        header {
             text-align: center;
-            max-width: 300px;
-            line-height: 1.5;
+            padding: 30px 0 15px;
         }
-
-        .loading-spinner {
-            width: 70px;
-            height: 70px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid white;
-            border-right: 5px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 30px;
+        .logo {
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
-
-        .loading-progress-container {
-            width: 280px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 5px;
-            margin-top: 20px;
-            overflow: hidden;
+        .subtitle {
+            font-size: 1.15em;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+        .hero {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .video-container {
             position: relative;
-        }
-
-        .loading-progress {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #ffffff, #A29BFE);
-            border-radius: 5px;
-            transition: width 0.3s ease;
-            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin: 0 auto 30px;
+            border-radius: 20px;
             overflow: hidden;
+            box-shadow: 0 12px 35px rgba(255,65,108,0.4);
         }
-
-        .loading-progress::after {
-            content: '';
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
-            bottom: 0;
-            width: 50px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
-            animation: shine 1.5s ease-in-out infinite;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
-
-        .loading-percentage {
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-top: 15px;
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin: 30px 0;
             text-align: center;
-            min-width: 50px;
         }
-
-        .loading-stats {
-            display: flex;
-            justify-content: space-between;
-            width: 280px;
-            margin-top: 15px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.8rem;
+        .stat {
+            background: rgba(255,255,255,0.08);
+            padding: 18px 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,65,108,0.2);
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #ff4b2b;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 35px 0;
         }
-
-        @keyframes shine {
-            0% { left: -50px; }
-            100% { left: 100%; }
+        .feature {
+            background: rgba(255,255,255,0.07);
+            padding: 18px;
+            border-radius: 16px;
+            text-align: center;
         }
-
-        /* Login Layout */
-        #login-screen { 
-            position: fixed; inset: 0; background: linear-gradient(135deg, var(--primary), #5848C2); 
-            z-index: 9998; display: flex; align-items: center; justify-content: center; padding: 20px;
+        .feature i { font-size: 2.5em; color: #ff416c; margin-bottom: 10px; }
+        .section-title {
+            text-align: center;
+            font-size: 1.7em;
+            color: #ff4b2b;
+            margin: 40px 0 25px;
+            font-weight: 700;
         }
-        .login-box { 
-            background: white; width: 100%; max-width: 380px; padding: 45px 30px; 
-            border-radius: var(--radius); text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        .tournament-grid {
+            display: grid;
+            gap: 18px;
+            margin-bottom: 50px;
         }
-        .login-box i { font-size: 3.5rem; color: var(--primary); margin-bottom: 15px; }
-
-        /* App Header */
-        header { 
-            background: var(--primary); padding: 40px 25px 90px; color: white; 
-            border-radius: 0 0 45px 45px; position: relative;
+        .tournament-card {
+            background: rgba(255,255,255,0.06);
+            padding: 22px;
+            border-radius: 16px;
+            border-left: 6px solid #ff416c;
+            transition: transform 0.3s;
         }
-        .user-info h2 { font-size: 1.4rem; font-weight: 700; }
-        .user-info p { font-size: 0.8rem; opacity: 0.9; }
-
-        /* Balance Section */
-        .dash-cards { padding: 0 20px; margin-top: -60px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .stat-card { 
-            background: var(--card); padding: 22px 15px; border-radius: var(--radius); 
-            box-shadow: var(--shadow); text-align: center; transition: 0.3s;
+        .tournament-card:hover { transform: translateY(-8px); }
+        .t-card-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffd0d0;
         }
-        .stat-card i { font-size: 1.6rem; margin-bottom: 8px; display: block; }
-        .stat-card b { font-size: 1.2rem; display: block; color: var(--primary); }
-        .stat-card label { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; font-weight: 600; }
-
-        /* Main Navigation */
-        nav { 
-            position: fixed; bottom: 0; width: 100%; background: white; height: 75px;
-            display: flex; align-items: center; justify-content: space-around;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.05); border-radius: 35px 35px 0 0; z-index: 1000;
+        .t-card-desc {
+            opacity: 0.93;
+            font-size: 1em;
         }
-        .nav-link { text-align: center; color: #B2BEC3; transition: 0.4s; flex: 1; cursor: pointer; }
-        .nav-link.active { color: var(--primary); transform: translateY(-3px); }
-        .nav-link i { font-size: 1.5rem; display: block; }
-        .nav-link span { font-size: 0.7rem; font-weight: 600; margin-top: 4px; display: block; }
-
-        /* Content Pages */
-        .page { display: none; padding: 30px 20px 120px; animation: fadeInUp 0.5s ease both; }
-        .page.active { display: block; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Task Item Cards */
-        .task-item { 
-            background: white; padding: 20px; border-radius: 22px; margin-bottom: 15px; 
-            display: flex; align-items: center; justify-content: space-between; 
-            box-shadow: var(--shadow); border: 1.5px solid transparent; transition: 0.3s;
+        .extra-download {
+            text-align: center;
+            margin: 30px 0 40px;
         }
-        .task-item:active { transform: scale(0.97); border-color: var(--primary); }
-        .task-meta b { font-size: 1rem; color: var(--text-dark); display: block; }
-        .task-meta span { font-size: 0.85rem; color: var(--primary); font-weight: 700; margin-top: 3px; display: inline-block; }
-        .count-badge { font-size: 0.7rem; background: #F1F2F6; padding: 4px 10px; border-radius: 50px; color: #636E72; font-weight: 700; margin-left: 5px; }
-        .status-tag { font-size: 0.65rem; background: var(--success); color: white; padding: 3px 8px; border-radius: 6px; margin-left: 8px; }
-
-        /* Link Formatting Logic */
-        .desc-text { font-size: 0.85rem; color: #555; line-height: 1.6; }
-        .desc-text a { color: #0984E3; text-decoration: underline; font-weight: 600; word-break: break-all; }
-
-        /* Wallet Design */
-        .billing-box { background: #E8F0FE; padding: 20px; border-radius: 20px; border-left: 5px solid var(--primary); margin-bottom: 20px; }
-        .bill-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; }
-        
-        .input-wrap { margin-bottom: 15px; }
-        .input-wrap label { font-size: 0.8rem; font-weight: 700; color: var(--text-light); margin-bottom: 6px; display: block; }
-        input, select, textarea { 
-            width: 100%; padding: 16px; border-radius: 18px; border: 2px solid #F1F2F6; 
-            font-family: 'Poppins', sans-serif; font-size: 0.9rem; transition: 0.3s;
+        .extra-download p {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        input:focus { border-color: var(--primary); background: #fff; }
-
-        .btn-submit { 
-            width: 100%; background: var(--primary); color: white; padding: 18px; 
-            border: none; border-radius: 20px; font-weight: 700; font-size: 1rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
-        }
-
-        /* Task Modal */
-        .task-modal { 
-            position: fixed; inset: 0; background: white; z-index: 10001; 
-            display: none; flex-direction: column; overflow-y: auto; padding: 25px;
-        }
-        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .inst-card { background: #FFF9E6; border: 1.5px dashed #FFD93D; padding: 18px; border-radius: 20px; margin-bottom: 25px; }
-
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .photo-input { 
-            aspect-ratio: 1/1; border: 2px dashed #DCDDE1; border-radius: 18px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            position: relative; overflow: hidden; background: #FAFAFF;
-        }
-        .photo-input i { font-size: 1.5rem; color: #A4B0BE; margin-bottom: 5px; }
-        .photo-input span { font-size: 0.65rem; color: #A4B0BE; font-weight: 700; }
-        .photo-input img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
-        .photo-input input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-
-        /* History Cards */
-        .hist-card { 
-            background: white; padding: 18px; border-radius: 20px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow);
-        }
-        .hist-dot { width: 12px; height: 12px; border-radius: 50%; }
-        
-        /* Settings Loader */
-        .settings-loader {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-        
-        /* Cache Indicator */
-        .cache-indicator {
-            font-size: 0.65rem;
-            background: var(--success);
+        .glow-btn {
+            position: relative;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff416c);
+            background-size: 200% 100%;
             color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            margin-left: 8px;
-            font-weight: 600;
+            border: none;
+            padding: 20px 0;
+            font-size: 1.5em;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+            box-shadow: 0 0 30px rgba(255,65,108,0.7),
+                        inset 0 0 20px rgba(255,255,255,0.2);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .glow-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .glow-btn:hover::before {
+            opacity: 1;
+        }
+        .glow-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(255,65,108,1),
+                        0 0 100px rgba(255,75,43,0.6);
+            background-position: right center;
+        }
+        .glow-btn i {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        footer {
+            text-align: center;
+            padding: 40px 0 60px;
+            opacity: 0.85;
+            font-size: 0.95em;
+        }
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            padding: 16px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            box-shadow: 0 6px 20px rgba(37,213,102,0.5);
+            transition: all 0.3s;
+        }
+        .whatsapp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37,213,102,0.7);
+        }
+        @media (min-width: 500px) {
+            .container { max-width: 500px; padding: 0 25px; }
+            .stats { grid-template-columns: repeat(4, 1fr); }
         }
     </style>
 </head>
 <body>
 
-    <!-- 6 Second Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
-        <div class="loading-logo">
-            <i class="fas fa-chart-line"></i>
-        </div>
-        <h1 class="loading-title">EarnPro Max</h1>
-        <p class="loading-subtitle">Initializing your earning dashboard...</p>
-        
-        <div class="loading-spinner"></div>
-        
-        <div class="loading-progress-container">
-            <div class="loading-progress" id="loading-bar"></div>
-        </div>
-        
-        <div class="loading-percentage" id="loading-percentage">0%</div>
-        
-        <div class="loading-stats">
-            <span>Connecting...</span>
-            <span id="loading-status">Initializing</span>
-        </div>
-    </div>
-
-    <div id="login-screen">
-        <div class="login-box">
-            <i class="fas fa-user-shield"></i>
-            <h2 style="margin-bottom: 5px;">Welcome Back</h2>
-            <p style="color: #636E72; font-size: 0.85rem; margin-bottom: 25px;">Enter your name to access dashboard</p>
-            <input type="text" id="userNameInput" placeholder="Enter Full Name">
-            <button class="btn-submit" style="margin-top: 15px;" onclick="doLogin()">
-                <i class="fas fa-sign-in-alt"></i>
-                Get Started
-            </button>
-        </div>
-    </div>
-
-    <div id="main-panel" style="display: none;">
-        <header>
-            <div class="user-info">
-                <p>Authenticated Member</p>
-                <h2 id="helloName">User</h2>
-            </div>
-        </header>
-
-        <div class="dash-cards">
-            <div class="stat-card">
-                <i class="fas fa-wallet" style="color: var(--success);"></i>
-                <b id="balReal">৳0.00</b>
-                <label>Available</label>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-history" style="color: var(--pending);"></i>
-                <b id="balWait">৳0.00</b>
-                <label>Reviewing</label>
-            </div>
-        </div>
-
-        <div id="pg-home" class="page active">
-            <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Available Micro Tasks</h3>
-            <div id="taskContainer">Loading tasks...</div>
-        </div>
-
-        <div id="pg-history" class="page">
-            <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Your Submissions</h3>
-            <div id="historyContainer">No work found.</div>
-        </div>
-
-        <div id="pg-wallet" class="page">
-            <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Withdraw Earnings</h3>
-            
-            <div class="billing-box">
-                <div class="bill-row">
-                    <span>Min Withdrawal:</span> 
-                    <span id="wMin">৳100 <span class="cache-indicator" id="minCache" style="display:none;">CACHED</span></span>
-                </div>
-                <div class="bill-row">
-                    <span>Service Fee:</span> 
-                    <span id="wFee" style="color:var(--danger)">৳10 <span class="cache-indicator" id="feeCache" style="display:none;">CACHED</span></span>
-                </div>
-                <div class="bill-row" style="margin-top:8px; padding-top:8px; border-top:1px solid #ccc;">
-                    <span style="color:var(--primary)">Net Payable:</span> 
-                    <b id="wNet" style="color:var(--success)">৳0.00</b>
-                </div>
-            </div>
-
-            <div class="stat-card" style="text-align: left; padding: 25px;">
-                <div class="input-wrap">
-                    <label>Withdrawal Amount</label>
-                    <input type="number" id="amtInp" placeholder="0.00" oninput="updateNet()">
-                </div>
-                <div class="input-wrap">
-                    <label>Method</label>
-                    <select id="methodInp">
-                        <option value="bkash">bKash Personal</option>
-                        <option value="nagad">Nagad Personal</option>
-                    </select>
-                </div>
-                <div class="input-wrap">
-                    <label>Account Number</label>
-                    <input type="number" id="numInp" placeholder="01XXXXXXXXX">
-                </div>
-                <button class="btn-submit" onclick="requestPayout()" id="cashoutBtn">
-                    <i class="fas fa-check-circle"></i>
-                    Confirm Cashout
-                </button>
-            </div>
-        </div>
-
-        <nav>
-            <div class="nav-link active" onclick="tab('pg-home', this)"><i class="fas fa-th-large"></i><span>Home</span></div>
-            <div class="nav-link" onclick="tab('pg-history', this)"><i class="fas fa-clock"></i><span>History</span></div>
-            <div class="nav-link" onclick="tab('pg-wallet', this)"><i class="fas fa-wallet"></i><span>Wallet</span></div>
-        </nav>
-    </div>
-
-    <div id="modalTask" class="task-modal">
-        <div class="modal-head">
-            <h3 id="mt-name">Submit Task</h3>
-            <i class="fas fa-times-circle" style="font-size: 2rem; color: #eee; cursor: pointer;" onclick="closeModal()"></i>
-        </div>
-        
-        <div class="inst-card">
-            <b style="color: #D35400;"><i class="fas fa-info-circle"></i> Instructions:</b>
-            <div id="mt-desc" class="desc-text" style="margin-top: 8px;"></div>
-        </div>
-
-        <div class="input-wrap">
-            <label>Proof Text (Email / Username)</label>
-            <textarea id="mt-proof" rows="3" placeholder="Enter proof details here..."></textarea>
-        </div>
-
-        <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-light);">Upload Screenshots</label>
-        <div id="mt-ss-grid" class="photo-grid"></div>
-
-        <button class="btn-submit" onclick="submitWork()" id="submitEvidenceBtn">
-            <i class="fas fa-check-circle"></i>
-            Submit Evidence
+    <!-- Sticky Top Download Button -->
+    <div class="download-cta">
+        <button class="download-btn" onclick="window.open('https://www.mediafire.com/file/xc0eqs0oydaxc0b/Tips+E-Sports.apk/file', '_blank')">
+            <i class="fas fa-trophy"></i> অ্যাপ ডাউনলোড করুন (টুর্নামেন্ট জয় করুন!)
         </button>
     </div>
 
-    <script>
-        // FIREBASE SETUP
-        const firebaseConfig = {
-            apiKey: "AIzaSyA-aGpfiX4YOvtqz3lAj_uhJk5-RWWxRm0",
-            authDomain: "create-f604b.firebaseapp.com",
-            databaseURL: "https://create-f604b-default-rtdb.firebaseio.com",
-            projectId: "create-f604b",
-            storageBucket: "create-f604b.firebasestorage.app",
-            messagingSenderId: "746233650368",
-            appId: "1:746233650368:web:92156beb54cfe674eae125"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    <div class="container">
 
-        let loggedUser = null;
-        let activeTask = null;
-        let screenshots = [];
-        let completedIDs = [];
-        let siteSettings = { min: 100, fee: 10 }; // Default values for instant loading
+        <header>
+            <div class="logo">
+                <i class="fas fa-crown"></i> Tips E-Sports
+            </div>
+            <p class="subtitle">বাংলাদেশের প্রথম ও সেরা ই-স্পোর্টস লার্নিং অ্যাপ</p>
 
-        // Loading screen variables
-        let loadingInterval;
-        let loadingProgress = 0;
-        let loadingDuration = 6000; // 6 seconds
+            <div class="extra-download">
+                <p>এখনই ডাউনলোড করে প্রো হয়ে উঠুন!</p>
+                <button class="glow-btn" onclick="window.open('https://www.mediafire.com/file/xc0eqs0oydaxc0b/Tips+E-Sports.apk/file', '_blank')">
+                    <i class="fas fa-download"></i> Tips E-Sports APK ডাউনলোড করুন
+                </button>
+            </div>
+        </header>
 
-        // Local Storage Keys
-        const STORAGE_KEYS = {
-            SETTINGS: 'earnpro_settings',
-            SETTINGS_TIMESTAMP: 'earnpro_settings_timestamp',
-            TASKS: 'earnpro_tasks_cache'
-        };
+        <div class="hero">
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/bDS5M7GE2bw" 
+                    title="কিভাবে আপনিও ESPORTS টুর্নামেন্ট খেলবেন তাও আবার ফ্রিতে.!🤯| Garena Free Fire | Toxic Jahid" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
 
-        // Cache duration - 24 hours
-        const CACHE_DURATION = 24 * 60 * 60 * 1000;
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">২ লক্ষ+</div>
+                <div>টুর্নামেন্ট প্লেয়ার</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">৫০K+</div>
+                <div>টুর্নামেন্ট</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">১০ লক্ষ+</div>
+                <div>পুরস্কার</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">২৪/৭</div>
+                <div>সাপোর্ট</div>
+            </div>
+        </div>
 
-        // Loading screen functions
-        function showLoadingScreen() {
-            document.getElementById('loading-screen').style.display = 'flex';
-            document.getElementById('loading-screen').classList.remove('fade-out');
-            document.body.style.overflow = 'hidden';
-            
-            // Reset progress
-            loadingProgress = 0;
-            document.getElementById('loading-bar').style.width = '0%';
-            document.getElementById('loading-percentage').textContent = '0%';
-            
-            // Start loading animation
-            startLoadingAnimation();
-        }
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-medal"></i>
+                <p>দৈনিক টুর্নামেন্ট</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-money-bill-wave"></i>
+                <p>রিয়েল ক্যাশ প্রাইজ</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-users"></i>
+                <p>সোলো/ডুও/স্কোয়াড</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <p>ফেয়ার প্লে</p>
+            </div>
+        </div>
 
-        function startLoadingAnimation() {
-            const loadingBar = document.getElementById('loading-bar');
-            const loadingPercent = document.getElementById('loading-percentage');
-            const loadingStatus = document.getElementById('loading-status');
-            
-            const steps = [
-                { time: 1000, percent: 15, status: "Loading assets..." },
-                { time: 2000, percent: 30, status: "Checking cache..." },
-                { time: 3000, percent: 50, status: "Authenticating..." },
-                { time: 4000, percent: 70, status: "
+        <h2 class="section-title"><i class="fas fa-trophy"></i> টুর্নামেন্ট ফিচার ও টিপস</h2>
+
+        <div class="tournament-grid">
+            <div class="tournament-card">
+                <div class="t-card-title">১. দৈনিক সোলো ফুল ম্যাপ টুর্নামেন্ট</div>
+                <div class="t-card-desc">প্রতিদিন নতুন সোলো টুর্নামেন্ট। টপ ১-১০ পজিশনে থাকলে রিয়েল মানি + ডায়মন্ড পুরস্কার। অ্যান্টি-চিট সিস্টেম সহ ফেয়ার খেলা!</div>
+            </div>
+            <div class="tournament-card">
+                <div class="t-card-title">২. ডুও/স্কোয়াড টুর্নামেন্ট</div>
+                <div class="t-card-desc">ফ্রেন্ডদের সাথে জয়েন করুন। টিম কমিউনিকেশন + স্ট্র্যাটেজি দিয়ে Conqueror র‍্যাঙ্ক পুশ করুন। বিশাল প্রাইজ পুল!</div>
+            </div>
+            <div class="tournament-card">
+                <div class="t-card-title">৩. লিডারবোর্ড ও র‍্যাঙ্কিং</div>
+                <div class="t-card-desc">রিয়েল-টাইম লিডারবোর্ড দেখুন। সবচেয়ে বেশি পয়েন্ট পেলে মাসিক বোনাস + এক্সক্লুসিভ রিওয়ার্ড।</div>
+            </div>
+            <div class="tournament-card">
+                <div class="t-card-title">৪. টুর্নামেন্ট জয়ের টিপস</div>
+                <div class="t-card-desc">Early loot → Safe rotation → Zone awareness। Drag shot প্র্যাকটিস করুন। টিমের সাথে ভালো কমিউনিকেট করুন। প্রো হয়ে উঠুন!</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Tips E-Sports © ২০২৬ | বাংলাদেশের #১ টুর্নামেন্ট প্ল্যাটফর্ম</p>
+            <a href="https://wa.me/qr/3NNXOBZFADXDM1" class="whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> WhatsApp সাপোর্টে চ্যাট করুন
+            </a>
+        </footer>
+
+    </div>
+
+</body>
+</html>
